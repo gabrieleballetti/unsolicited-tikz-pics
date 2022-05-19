@@ -3,4 +3,4 @@
 
 Just a place where I store code to generate images for my presentations, blog posts and similar.
 
-![http://url/to/img.png](https://gabrieleballetti.github.io/assets/img/2022-05-16-TropicalML/tropical_polynomial.svg)
+![tropical](https://gabrieleballetti.github.io/assets/img/2022-05-16-TropicalML/tropical_polynomial.svg)
