@@ -1,0 +1,52 @@
+\documentclass[tikz,border=3mm]{standalone}
+\begin{document}
+
+\begin{tikzpicture}
+  % p - q
+  \begin{scope}[shift={(0,0)}]
+    \draw[ultra thick, color=black!90, line join=round] (-2,0) -- (-1,0) -- (1,1) -- (1,2) -- (0,3) -- (-1,3) -- (-2,1) -- cycle;
+    \filldraw[black] (0,0) circle (2pt) node[below right] {$\mathbf{0}$};
+
+    \filldraw[black] (-2,1) circle (2pt) node[above left] {$S_0$};
+    \draw[shorten >= 3pt, thick,->] (-2,1) -- (0,0) node[midway, above] {$d_0$};
+    \filldraw[black] (1,1) circle (2pt) node[right] {$\mathrm{supp}(d_0)$};
+    \draw[thick, dashed] (1.5,2) -- (0.5,0);
+  \end{scope}
+
+  \begin{scope}[shift={(5,0)}]
+    \draw[ultra thick, color=black!90, line join=round] (-2,0) -- (-1,0) -- (1,1) -- (1,2) -- (0,3) -- (-1,3) -- (-2,1) -- cycle;
+    \filldraw[black] (0,0) circle (2pt) node[below right] {$\mathbf{0}$};
+
+    \draw[thick] (-2,1) -- (1,1) node[midway, above] {$S_1$};
+    \draw[shorten >= 3pt, thick,->] (0,1) -- (0,0) node[midway, xshift=-5pt, yshift=5pt] {$d_1$};
+    \filldraw[black] (-2,0) circle (2pt) node[below] {$\mathrm{supp}(d_1)$};
+    \draw[thick, dashed] (-2.5,0) -- (-0.5,0);
+  \end{scope}
+
+  \begin{scope}[shift={(0,-4)}]
+    \draw[fill, black!20] (-2,1) -- (1,1) -- (-2,0);
+    \draw[ultra thick, color=black!90, line join=round] (-2,0) -- (-1,0) -- (1,1) -- (1,2) -- (0,3) -- (-1,3) -- (-2,1) -- cycle;
+    \filldraw[black] (0,0) circle (2pt) node[below right] {$\mathbf{0}$};
+
+    \draw[thick] (-2,1) -- (1,1) node[midway, below left] {$S_2$};
+    \draw[thick] (-2,0) -- (1,1);
+    \draw[shorten >= 3pt, thick,->] (-.25,.6) -- (0,0) node[midway, xshift=8pt, yshift=1pt] {$d_2$};
+    \filldraw[black] (-1,0) circle (2pt) node[below] {$\mathrm{supp}(d_2)$};
+    \draw[thick, dashed] (-1.6,-.2) -- (-0.4,.2);
+  \end{scope}
+
+  \begin{scope}[shift={(5,-4)}]
+    \draw[fill, black!20] (-2,0) -- (1,1) -- (-1,0);
+    \draw[ultra thick, color=black!90, line join=round] (-2,0) -- (-1,0) -- (1,1) -- (1,2) -- (0,3) -- (-1,3) -- (-2,1) -- cycle;
+    \filldraw[black] (0,0) circle (2pt) node[below right] {$\mathbf{0}$};
+
+    \draw[thick] (-2,0) -- (1,1) node[midway, above] {$S_3$};
+    \draw[shorten >= 3pt, thick,->] (-.2,.4) -- (0,0) node[midway, xshift=8pt, yshift=3pt] {$d_3$};
+    \draw[thick, dashed] (-1.4,-.2) -- (1.4,1.2);
+  \end{scope}
+
+  
+  
+\end{tikzpicture}
+
+\end{document}
