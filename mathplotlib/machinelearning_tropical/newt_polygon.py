@@ -18,8 +18,6 @@ ax.annotate("$(2,2)$", (2, 2), xytext=(2, 2 - 0.2))
 ax.annotate("$(1,2)$", (1, 2), xytext=(1, 2 - 0.2))
 ax.annotate("$(0,1)$", (0, 1), xytext=(0, 1 - 0.2))
 
-#ax.set_title('')
-
 ax.axis('equal')
 ax.axis('off')
 
