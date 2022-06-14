@@ -1,17 +1,9 @@
-''' Present an interactive function explorer with slider widgets.
-Scrub the sliders to change the properties of the ``sin`` curve, or
-type into the title text box to update the title of the plot.
-Use the ``bokeh serve`` command to run the example by executing:
-    bokeh serve sliders.py
-at your command prompt. Then navigate to the URL
-    http://localhost:5006/sliders
-in your browser.
-'''
+from os import remove
 import numpy as np
 
 from bokeh.io import curdoc, show
 from bokeh.layouts import column, row
-from bokeh.models import ColumnDataSource, Slider, TextInput, Range1d, CustomJS, TextAreaInput
+from bokeh.models import ColumnDataSource, Slider, TextInput, Range1d, CustomJS, Button, TextAreaInput
 from bokeh.plotting import figure, output_file, show
 
 from bokeh.io import show
@@ -24,17 +16,17 @@ from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 import matplotlib.pyplot as plt
 import numpy as np
 
-def parse(filename):
+def parse(string):
     '''
-    Parse points from the input files
+    Parse points from the textarea
     '''
-    file = open(filename, 'r', encoding="utf-8")
+    print(string)
     points = []
-    for line in file:
+    for line in iter(string.splitlines()):
         point = [float(n) for n in line.split()]
         if len(point) == 3:
             points.append(point)
-    file.close()
+    print(points)
     return points
 
 def preprocess_points(points, use_min_convention):
@@ -46,6 +38,19 @@ def preprocess_points(points, use_min_convention):
     points.append(new_pt)
     return np.array(points)
 
+def draw_newton_poly(points):
+    subdivision_ids, flat_edges = hull.compute_lu_hull(points, use_min_convention)
+    edges = subdivision.edges(points, subdivision_ids, flat_edges)
+    for edge in edges:
+        fig.segment(edge[0][0], edge[0][1], edge[1][0], edge[1][1])
+
+def update_limits(points):
+    for p in points:
+        min_x = min(min_x, p[0])
+        max_x = max(max_x, p[0])
+        min_y = min(min_y, p[1])
+        max_y = max(max_y, p[1])
+
 use_min_convention = False
 
 # file to save the model
@@ -54,65 +59,51 @@ output_file("gfg.html")
 # Set up plot
 fig = figure(height=400, width=400, match_aspect=True)
 
-list_points = [[0,0,0],[1,0,0],[0,1,0]]
-# preprocessing
-points = preprocess_points(list_points, use_min_convention)
-subdivision_ids, flat_edges = hull.compute_lu_hull(points, use_min_convention)
+default_points = """\
+0 0 0
+1 0 2
+2 0 2
+3 0 0
+0 1 2
+1 1 3
+2 1 2
+0 2 2
+1 2 2
+0 3 0
+"""
 
-subdivision.plot(fig, points, subdivision_ids, flat_edges)
+textarea = TextAreaInput(title="Exponents + coefficients", value=default_points, height=400, width=300, sizing_mode="stretch_height")
+button = Button(label='Click me', button_type="success")
+
+min_x = 0
+max_x = 0
+min_y = 0
+max_y = 0
+
+def change_click():
+    fig.renderers = []
+    points = preprocess_points(parse(textarea.value), use_min_convention)
+    draw_newton_poly(points)
+    #update_limits(points)
+
+button.on_click(change_click)
+
+
+# preprocessing
+
 fig.toolbar.logo = None
 fig.toolbar_location = None
 fig.axis.visible = False
-fig.x_range=Range1d(-1, 2)
-fig.y_range=Range1d(-1, 2)
 fig.toolbar.active_drag = None
 fig.toolbar.active_scroll = None
 fig.toolbar.active_tap = None
-show(fig)
 
 
-points = TextAreaInput(value="default", rows=6, title="Label:")
-points.js_on_change("value", CustomJS(code="""
-    console.log('text_area_input: value=' + this.value, this.toString())
-"""))
+fig.x_range=Range1d(min_x - 1, max_x + 1)
+fig.y_range=Range1d(min_y - 1, max_y + 1)
 
-show(points)
-#
-#
-## Set up widgets
-#text = TextInput(title="title", value='my sine wave')
-#offset = Slider(title="offset", value=0.0, start=-5.0, end=5.0, step=0.1)
-#amplitude = Slider(title="amplitude", value=1.0, start=-5.0, end=5.0, step=0.1)
-#phase = Slider(title="phase", value=0.0, start=0.0, end=2*np.pi)
-#freq = Slider(title="frequency", value=1.0, start=0.1, end=5.1, step=0.1)
-#
-#
-## Set up callbacks
-#def update_title(attrname, old, new):
-#    plot.title.text = text.value
-#
-#text.on_change('value', update_title)
-#
-#def update_data(attrname, old, new):
-#
-#    # Get the current slider values
-#    a = amplitude.value
-#    b = offset.value
-#    w = phase.value
-#    k = freq.value
-#
-#    # Generate the new curve
-#    x = np.linspace(0, 4*np.pi, N)
-#    y = a*np.sin(k*x + w) + b
-#
-#    source.data = dict(x=x, y=y)
-#
-#for w in [offset, amplitude, phase, freq]:
-#    w.on_change('value', update_data)
-#
-#
-## Set up layouts and add to document
-#inputs = column(text, offset, amplitude, phase, freq)
-#
-#curdoc().add_root(row(inputs, plot, width=800))
-#curdoc().title = "Sliders"
+inputs = column(textarea, button)
+curdoc().add_root(row(inputs, fig))
+
+
+change_click()
