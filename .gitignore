@@ -1,0 +1,6 @@
+tikz/**/*.aux
+tikz/**/*.fdb_latexmk
+tikz/**/*.fls
+tikz/**/*.log
+tikz/**/*.pdf
+tikz/**/*.gz
