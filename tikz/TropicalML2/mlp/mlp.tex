@@ -1,5 +1,7 @@
 \documentclass[tikz,border=3mm]{standalone}
 
+% Inspired from https://davidstutz.de/illustrating-convolutional-neural-networks-in-latex-with-tikz/
+
 \usepackage{amsmath}
 
 \usetikzlibrary{decorations.pathreplacing}
@@ -42,7 +44,7 @@
 		\node[node](hLm) at (9,-0.5){$y_{m^{(L-1)}}^{(L-1)}$};
 		
 		% layer L
-		\node[node](y0) at (12,2){$y_0^{(L+1)}$};
+		\node[node](y0) at (12,2){$y_0^{(L)}$};
 		
 		% 0 -> 1
 		\draw[->] (x0) -- (h10);
